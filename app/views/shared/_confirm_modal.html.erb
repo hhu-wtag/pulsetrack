@@ -1,0 +1,18 @@
+<dialog id="confirm_modal" class="modal" data-confirm-target="modal">
+  <div class="modal-box">
+
+    <h3 class="font-bold text-lg" data-confirm-target="title">Delete Site</h3>
+    <p class="py-4" data-confirm-target="message">Are you sure?</p>
+
+    <div class="modal-action">
+      <button class="btn" data-action="click->confirm#close">Cancel</button>
+
+      <div data-confirm-target="formContainer">
+      </div>
+    </div>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

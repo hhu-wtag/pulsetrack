@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  monitored_site: one
+  status: 1
+  http_status_code: 1
+  response_time_ms: 1
+  error_message: MyText
+
+two:
+  monitored_site: two
+  status: 1
+  http_status_code: 1
+  response_time_ms: 1
+  error_message: MyText

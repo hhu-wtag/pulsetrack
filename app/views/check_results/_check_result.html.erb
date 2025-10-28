@@ -1,0 +1,19 @@
+<tr id="<%= dom_id(check_result) %>">
+  <td>
+    <% if check_result.up? %>
+      <span class="badge badge-success">Up</span>
+    <% elsif check_result.down? %>
+      <span class="badge badge-error">Down</span>
+    <% elsif check_result.timed_out? %>
+      <span class="badge badge-warning">Timed Out</span>
+    <% else %>
+      <span class="badge badge-ghost">Error</span>
+    <% end %>
+  </td>
+  <td><%= check_result.http_status_code %></td>
+  <td><%= check_result.response_time_ms.present? ? "#{check_result.response_time_ms} ms" : "N/A" %></td>
+  <td class="max-w-xs truncate" title="<%= check_result.error_message %>">
+    <%= check_result.error_message %>
+  </td>
+  <td><%= time_ago_in_words(check_result.created_at) %> ago</td>
+</tr>

@@ -1,0 +1,2 @@
+module MonitoredSitesHelper
+end

@@ -1,0 +1,41 @@
+<section class="flex flex-col items-center justify-center m-auto">
+  <div class="card w-full max-w-md shadow-xl bg-base-100">
+    <div class="card-body">
+      <div class="flex flex-col items-center mb-6">
+        <!-- Simple illustration -->
+        <svg width="64" height="64" fill="none" viewBox="0 0 64 64" class="mb-2">
+          <circle cx="32" cy="32" r="32" fill="#E0E7FF"/>
+          <path d="M32 36c5.523 0 10-4.477 10-10S37.523 16 32 16s-10 4.477-10 10 4.477 10 10 10zm0 4c-6.627 0-20 3.314-20 10v2a2 2 0 002 2h36a2 2 0 002-2v-2c0-6.686-13.373-10-20-10z" fill="#6366F1"/>
+        </svg>
+        <h2 class="text-2xl font-bold text-center">Log in</h2>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="form-control mb-4">
+          <%= f.label :email, class: "label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input input-bordered" %>
+        </div>
+
+        <div class="form-control mb-4">
+          <%= f.label :password, class: "label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "input input-bordered" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="form-control mb-4 flex flex-row items-center gap-2">
+            <%= f.check_box :remember_me, class: "checkbox" %>
+            <%= f.label :remember_me, class: "label cursor-pointer" %>
+          </div>
+        <% end %>
+
+        <div class="form-control mt-6">
+          <%= f.submit "Log in", class: "btn btn-primary w-full" %>
+        </div>
+      <% end %>
+
+      <div class="mt-4 text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,70 @@
+<div class="container mx-auto py-8 px-4">
+  <%= turbo_stream_from @monitored_site %>
+  <div class="mb-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold"><%= @monitored_site.name %></h1>
+      <div>
+        <%= link_to "Edit", edit_monitored_site_path(@monitored_site), class: "btn btn-outline" %>
+        <%= link_to "Back to all sites", monitored_sites_path, class: "btn btn-ghost" %>
+      </div>
+    </div>
+    <%= link_to @monitored_site.url, @monitored_site.url, target: "_blank", class: "link link-primary text-lg" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Current Status</h2>
+        <% if @monitored_site.up? %>
+          <p class="text-4xl font-bold text-success">Up</p>
+          <p>Your site is online and responsive.</p>
+        <% elsif @monitored_site.down? %>
+          <p class="text-4xl font-bold text-error">Down</p>
+          <p>We couldn't reach your site on the last check.</p>
+        <% else %>
+          <p class="text-4xl font-bold text-base-content/50">Pending</p>
+          <p>We're scheduled to check your site shortly.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Average Response</h2>
+        <p class="text-4xl font-bold">-- ms</p>
+        <p>Average over the last 24 hours.</p>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">Uptime (24h)</h2>
+        <p class="text-4xl font-bold">-- %</p>
+        <p>Uptime over the last 24 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-2xl font-bold mb-4">Recent Check Results</h2>
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <thead>
+      <tr>
+        <th>Status</th>
+        <th>HTTP Code</th>
+        <th>Response Time</th>
+        <th>Error</th>
+        <th>Checked At</th>
+      </tr>
+      </thead>
+      <tbody id="<%= dom_id(@monitored_site, "check_results_body") %>">
+
+      <%= render @check_results %>
+
+      <% if @check_results.empty? %>
+        <%= render "check_results/no_result_row", monitored_site: @monitored_site %>
+      <% end %>
+
+      </tbody>
+    </table>
+  </div>
+</div>

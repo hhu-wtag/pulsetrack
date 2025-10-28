@@ -1,0 +1,51 @@
+<%= form_with(model: @monitored_site, class: "space-y-4") do |form| %>
+
+  <% if @monitored_site.errors.any? %>
+    <div role="alert" class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2.99A9 9 0 114.99 7.004A9 9 0 0117 11.01z"/>
+      </svg>
+      <div>
+        <h3 class="font-bold"><%= pluralize(@monitored_site.errors.count, "error") %> prohibited this site from being
+          saved:</h3>
+        <ul class="list-disc list-inside">
+          <% @monitored_site.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-control">
+    <%= form.label :name, class: "label" %>
+    <%= form.text_field :name, class: "input input-bordered w-full", placeholder: "e.g. My Personal Blog" %>
+  </div>
+
+  <div class="form-control">
+    <%= form.label :url, class: "label" %>
+    <%= form.text_field :url, class: "input input-bordered w-full", placeholder: "https://example.com" %>
+  </div>
+
+  <div class="form-control">
+    <%= form.label :check_frequency_seconds, "Check Frequency", class: "label" %>
+    <%= form.select :check_frequency_seconds,
+                    options_for_select([
+                                         ['Every 1 minute', 60],
+                                         ['Every 5 minutes', 300],
+                                         ['Every 15 minutes', 900],
+                                         ['Every 30 minutes', 1800],
+                                         ['Every 1 hour', 3600]
+                                       ], @monitored_site.check_frequency_seconds || 10),
+                    {},
+                    class: "select select-bordered w-full"
+    %>
+    <div class="label">
+      <span class="label-text-alt">How often we check if your site is up. (Default: 5 mins)</span>
+    </div>
+  </div>
+
+  <div class="form-control pt-4">
+    <%= form.submit "Save Site", class: "btn btn-primary" %>
+  </div>
+<% end %>
