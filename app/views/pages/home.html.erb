@@ -1,3 +1,7 @@
-<div>
+<div <%= turbo_stream_from "user_#{current_user.id}_notifications" %>>
   <h1 class="font-bold text-4xl">Dashboard</h1>
+
+  <ul id="notifications_list">
+    <%= render @notifications %>
+  </ul>
 </div>
