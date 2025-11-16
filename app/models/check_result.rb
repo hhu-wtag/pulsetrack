@@ -18,7 +18,7 @@ class CheckResult < ApplicationRecord
 
     if monitored_site.check_results.length == 1
       broadcast_remove_to monitored_site,
-                          target: [monitored_site, "no_results_row"]
+                          target: [ monitored_site, "no_results_row" ]
     end
   end
 end
