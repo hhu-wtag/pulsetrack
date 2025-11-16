@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "dotenv", groups: [:development, :test]
+gem "dotenv", groups: [ :development, :test ]
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
@@ -53,7 +53,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  gem 'rspec-rails', '~> 8.0', '>= 8.0.2'
+  gem "rspec-rails", "~> 8.0", ">= 8.0.2"
   gem "factory_bot_rails"
   gem "faker"
 end
