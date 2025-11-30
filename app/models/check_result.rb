@@ -3,6 +3,8 @@ class CheckResult < ApplicationRecord
 
   enum :status, { up: 0, down: 1, timed_out: 2, error: 3 }
 
+  validates :status, presence: true
+
   after_create_commit :broadcast_new_result_to_table
 
   private
