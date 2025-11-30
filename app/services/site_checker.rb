@@ -59,4 +59,3 @@ class SiteChecker
     }
   end
 end
-
