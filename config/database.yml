@@ -19,6 +19,12 @@ development:
     pool: 5
     timeout: 5000
     migrations_paths: db/queue_migrate
+  cable:
+    adapter: sqlite3
+    database: storage/cable_development.sqlite3
+    pool: 5
+    timeout: 5000
+    migrations_paths: db/cable_migrate
 
 test:
   primary:
