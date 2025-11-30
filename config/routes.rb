@@ -5,9 +5,8 @@ Rails.application.routes.draw do
   root "pages#home", as: :home
 
   resources :monitored_sites do
-    resources :check_results, only: [:index, :show]
+    resources :check_results, only: [ :index, :show ]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
-
 end
