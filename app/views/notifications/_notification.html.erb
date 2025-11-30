@@ -1,0 +1,7 @@
+<li id="<%= dom_id(notification) %>" class="notification-item">
+  <div class="notification-content">
+    <span class="badge badge-primary">New</span>
+    <p><%= notification.message %></p>
+    <small><%= time_ago_in_words(notification.created_at) %> ago</small>
+  </div>
+</li>

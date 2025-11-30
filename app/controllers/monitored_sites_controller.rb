@@ -1,6 +1,6 @@
 class MonitoredSitesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_monitored_sites, only: [:show, :edit, :update, :destroy]
+  before_action :set_monitored_sites, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @monitored_sites = current_user.monitored_sites.order(created_at: :desc)
