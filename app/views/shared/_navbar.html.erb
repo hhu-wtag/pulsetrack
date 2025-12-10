@@ -2,17 +2,17 @@
   <% if user_signed_in? %>
     <div class="navbar bg-base-100 shadow-sm">
       <div class="flex-1">
-        <li><%= link_to "PulseTrack", home_path, class: "btn btn-ghost text-xl" %></li>
+        <li><%= link_to "PulseTrack", home_path, class: "text-xl" %></li>
       </div>
       <div class="flex-none">
-        <ul class="menu menu-horizontal px-1">
-          <% if user_signed_in? %>
-            <li><%= link_to "My Sites", monitored_sites_path %></li>
+        <ul class="menu menu-horizontal px-1 gap-2">
 
-            <li><%= link_to "Account", edit_user_registration_path %></li>
-            <li>
-              <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-ghost" %>
-            </li>
+          <% if user_signed_in? %>
+            <button class="<%= current_page?("/monitored_sites") ? '' : 'btn-ghost'%> btn btn-info"><%= link_to "My Sites", monitored_sites_path %></button>
+
+            <button class="btn btn-ghost btn-info"><%= link_to "Account", edit_user_registration_path %></button>
+
+            <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-ghost btn-error" %>
           <% else %>
             <li><%= link_to "Log In", new_user_session_path %></li>
             <li><%= link_to "Sign Up", new_user_registration_path %></li>

@@ -1,0 +1,8 @@
+bd:
+  datetime:
+    distance_in_words:
+      about_x_months: "pray"
+  monitored_sites:
+    title: "Monitor kora site gulo:"
+  time:
+    ago: "age"
