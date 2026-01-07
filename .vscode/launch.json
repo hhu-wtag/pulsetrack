@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "ruby_lsp",
+      "name": "Rails Server",
+      "request": "launch",
+      "program": "bin/rails dev"
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Attach to Rails",
+      "request": "attach"
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Rails Console",
+      "request": "launch",
+      "program": "bin/rails console"
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Run Current Spec",
+      "request": "launch",
+      "program": "bundle exec rspec ${file}"
+    }
+  ]
+}

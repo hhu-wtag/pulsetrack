@@ -1,0 +1,16 @@
+version: "3"
+vars:
+
+tasks:
+  dev:
+    desc: Start the dev server
+    cmds:
+      - bin/dev
+  server:
+    desc: Start the server
+    cmds:
+      - bin/server
+  jobs:
+    desc: Start the job server
+    cmds:
+      - bin/jobs start
