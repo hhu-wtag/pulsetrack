@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, path: "user"
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
-  root "pages#home", as: :home
+  resource :user, only: [ :show ], controller: "users"
 
   resources :monitored_sites do
     resources :check_results, only: [ :index, :show ]
   end
+
+  root "pages#home", as: :home
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

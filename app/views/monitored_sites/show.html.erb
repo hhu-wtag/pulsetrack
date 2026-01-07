@@ -60,11 +60,15 @@
 
       <%= render @check_results %>
 
+
       <% if @check_results.empty? %>
         <%= render "check_results/no_result_row", monitored_site: @monitored_site %>
       <% end %>
 
       </tbody>
     </table>
+
+
+    <%== @pagy.series_nav %>
   </div>
 </div>

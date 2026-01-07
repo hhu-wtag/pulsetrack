@@ -1,0 +1,66 @@
+<div class="flex items-center justify-center w-full sm:px-6 sm:mt-8 lg:px-8 lg:mt-12">
+  <div class="card w-full max-w-5xl bg-base-200 shadow-xl overflow-hidden">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 h-full">
+      
+      <div class="lg:col-span-2 p-8 lg:border-r border-base-200">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold">My Profile</h2>
+          <%= link_to edit_user_registration_path, class: "btn btn-sm btn-outline" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            Edit Profile
+          <% end %>
+        </div>
+
+        <div class="space-y-6">
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text font-medium text-base-content/60">Email Address</span>
+            </label>
+            <div class="w-full p-3 bg-base-200 rounded-lg text-base-content">
+              <%= @user.email %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium text-base-content/60">Member Since</span>
+              </label>
+              <div class="w-full p-3 bg-base-200 rounded-lg text-base-content">
+                <%= @user.created_at.strftime("%B %d, %Y") %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-base-200/30 p-8 flex flex-col justify-between border-t lg:border-t-0">
+        <div>
+          <h3 class="text-xl font-bold mb-4">Account Status</h3>
+          
+          <div class="stats stats-vertical shadow w-full bg-base-100">
+            <div class="stat">
+              <div class="stat-title">Account Type</div>
+              <div class="stat-value text-primary text-2xl">Standard</div>
+              <div class="stat-desc">Free Plan</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 lg:mt-0">
+          <div class="alert shadow-sm bg-base-100">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <div class="text-xs">
+              Need to change your password? <br/>
+              Click "Edit Profile" to update security settings.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

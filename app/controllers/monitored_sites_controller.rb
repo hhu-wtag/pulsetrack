@@ -7,7 +7,8 @@ class MonitoredSitesController < ApplicationController
   end
 
   def show
-    @check_results = @monitored_site.check_results.order(created_at: :desc).limit(50)
+    collection = @monitored_site.check_results.order(created_at: :desc)
+    @pagy, @check_results = pagy(:offset, collection)
   end
 
   def new
