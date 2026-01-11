@@ -6,8 +6,13 @@ class CheckResult < ApplicationRecord
   validates :status, presence: true
 
   after_create_commit :broadcast_new_result_to_table
+  after_create_commit :broadcast_avg_response_time
 
   private
+
+  def broadcast_avg_response_time
+    AverageUptimeJob.perform_later(monitored_site)
+  end
 
   def broadcast_new_result_to_table
     domId = "check_results_body_monitored_site_#{monitored_site.id}"
