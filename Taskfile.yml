@@ -14,3 +14,7 @@ tasks:
     desc: Start the job server
     cmds:
       - bin/jobs start
+  console:
+    desc: Start rails console on current rails process
+    cmds:
+      - bin/rails console
