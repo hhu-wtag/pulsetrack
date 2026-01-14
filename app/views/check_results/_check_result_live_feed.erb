@@ -1,0 +1,14 @@
+<% theme = status_style(check_result.status) %>
+<div class="flex items-center justify-between p-3 rounded <%= theme[:bg] %> <%= theme[:border] %>">
+  <div class="flex items-center gap-3">
+    <span class="w-2 h-2 rounded-full <%= theme[:ping_bg] %>"></span>
+    <div class="grid grid-cols-2 space-x-8 items-center">
+      <span class="flex-1"><%= check_result.monitored_site.name %></span>
+      <span class="flex-1 text-sm font-mono text-slate-400"><%= local_time(check_result.created_at.strftime("%I:%M %p")) %></span>
+    </div>
+  </div>
+  <div class="flex items-center space-x-2 w-[150px]">
+    <span class="text-sm flex-1"><%= check_result.http_status_code %></span>
+    <span class="text-xs flex-1 text-slate-500 font-mono"><%= check_result.response_time_ms %> ms</span>
+  </div>
+</div>

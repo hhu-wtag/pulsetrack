@@ -21,11 +21,11 @@ class MonitoredSite < ApplicationRecord
 
   def uptime(within: 1.hour)
     results = check_results
-      .where(created_at: within.ago..Time.current)
+                .where(created_at: within.ago..Time.current)
 
     total_count = results.count
 
-    return 100.0 if total_count.zero?
+    return "N/A" if total_count.zero?
 
     up_count = results.up.count
 

@@ -31,9 +31,9 @@
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Average Response</h2>
-        <%= render "monitored_sites/avg_time", 
-                    average: @initial_average,
-                    monitored_site: @monitored_site
+        <%= render "monitored_sites/avg_time",
+                   average: @initial_average,
+                   monitored_site: @monitored_site
         %>
         <p>Average over the last 24 hours.</p>
       </div>
@@ -41,7 +41,7 @@
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Uptime (1h)</h2>
-        <p class="text-4xl font-bold"><%= @uptime %>%</p>
+        <p class="text-4xl font-bold"><%= @uptime %> <%= '%' unless @uptime == 'N/A' %></p>
         <p>Uptime over the last 1 hour.</p>
       </div>
     </div>
