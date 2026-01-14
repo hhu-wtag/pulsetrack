@@ -2,7 +2,7 @@ class ScheduleSiteCheckJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    sites_due = MonitoredSite.where("next_check_at <= ?", 1.minutes.ago)
+    sites_due = MonitoredSite.where("next_check_at <= ?", Time.now)
 
     puts sites_due.inspect
 

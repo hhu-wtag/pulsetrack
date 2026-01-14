@@ -1,0 +1,28 @@
+version: "3"
+vars:
+
+tasks:
+  dev:
+    desc: Start the dev server
+    cmds:
+      - bin/dev
+  server:
+    desc: Start the server
+    cmds:
+      - bin/server
+  jobs:
+    desc: Start the job server
+    cmds:
+      - bin/jobs start
+  console:
+    desc: Start rails console on current rails process
+    cmds:
+      - bin/rails console
+  lint:
+    desc: Run rubocop for linting
+    cmds:
+      - rubocop
+  lint::fix:
+    desc: Run rubocop for linting with autocorrection
+    cmds:
+      - rubocop -A

@@ -5,14 +5,13 @@
         <li><%= link_to "PulseTrack", home_path, class: "btn btn-ghost text-xl" %></li>
       </div>
       <div class="flex-none">
-        <ul class="menu menu-horizontal px-1">
+        <ul class="menu menu-horizontal px-1 gap-2">
           <% if user_signed_in? %>
-            <li><%= link_to "My Sites", monitored_sites_path %></li>
+            <%= link_to "My Sites", monitored_sites_path, class: "btn btn-info #{active_nav_button_class('/monitored_sites')}" %>
 
-            <li><%= link_to "Account", edit_user_registration_path %></li>
-            <li>
-              <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-ghost" %>
-            </li>
+            <%= link_to "Account", user_path, class: "btn btn-info #{active_nav_button_class('/user')}" %>
+
+            <%= button_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-ghost btn-error" %>
           <% else %>
             <li><%= link_to "Log In", new_user_session_path %></li>
             <li><%= link_to "Sign Up", new_user_registration_path %></li>

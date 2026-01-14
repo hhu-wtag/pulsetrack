@@ -13,6 +13,25 @@ class MonitoredSite < ApplicationRecord
     no_local: true
   }
 
+  def average_response_time(within: 1.hour)
+    check_results
+      .where(created_at: within.ago..Time.current)
+      .average(:response_time_ms)
+  end
+
+  def uptime(within: 1.hour)
+    results = check_results
+      .where(created_at: within.ago..Time.current)
+
+    total_count = results.count
+
+    return 100.0 if total_count.zero?
+
+    up_count = results.up.count
+
+    ((up_count.to_f / total_count) * 100).round(2)
+  end
+
   private
 
   def handle_status_change

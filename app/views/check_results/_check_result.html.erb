@@ -15,5 +15,7 @@
   <td class="max-w-xs truncate" title="<%= check_result.error_message %>">
     <%= check_result.error_message %>
   </td>
-  <td><%= time_ago_in_words(check_result.created_at) %> ago</td>
+  <td>
+    <span data-controller="time-ago" data-time-ago-datetime-value="<%= check_result.created_at.iso8601 %>" data-action="tick@window->time-ago#update"></span>
+  </td>
 </tr>

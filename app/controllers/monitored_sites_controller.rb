@@ -7,7 +7,11 @@ class MonitoredSitesController < ApplicationController
   end
 
   def show
-    @check_results = @monitored_site.check_results.order(created_at: :desc).limit(50)
+    @initial_average = @monitored_site.average_response_time
+    @uptime = @monitored_site.uptime
+    collection = @monitored_site.check_results.order(created_at: :desc)
+
+    @pagy, @check_results = pagy(:offset, collection)
   end
 
   def new
