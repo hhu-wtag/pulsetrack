@@ -6,19 +6,9 @@ class CheckResult < ApplicationRecord
   validates :status, presence: true
 
   after_create_commit :broadcast_new_result_to_table
-  after_create_commit :broadcast_to_dashboard
   after_create_commit :broadcast_avg_response_time
 
   private
-
-  def broadcast_to_dashboard
-    broadcast_prepend_to(
-      "monitoring_dashboard",
-      target: "global_live_feed",
-      partial: "check_results/check_result_live_feed",
-      locals: { check_result: self }
-    )
-  end
 
   def broadcast_avg_response_time
     AverageUptimeJob.perform_later(monitored_site)
