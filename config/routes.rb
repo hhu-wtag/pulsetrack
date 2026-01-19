@@ -5,6 +5,11 @@ Rails.application.routes.draw do
   resource :user, only: [ :show ], controller: "users"
 
   resources :monitored_sites do
+    member do
+      patch :in_maintenance
+      patch :out_maintenance
+    end
+
     resources :check_results, only: [ :index, :show ]
   end
 
