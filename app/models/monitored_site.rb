@@ -5,7 +5,12 @@ class MonitoredSite < ApplicationRecord
 
   after_commit :handle_status_change, on: :update, if: :saved_change_to_last_status?
 
-  enum :last_status, { pending: 0, up: 1, down: 2 }
+  enum :last_status, { pending: 0, up: 1, down: 2, maintenance: 3 }
+
+  scope :ready_for_check, -> {
+    where("next_check_at <= ?", Time.current)
+      .where.not(last_status: :maintenance)
+  }
 
   validates :name, presence: true
   validates :url, presence: true, url: {
@@ -21,11 +26,11 @@ class MonitoredSite < ApplicationRecord
 
   def uptime(within: 1.hour)
     results = check_results
-      .where(created_at: within.ago..Time.current)
+                .where(created_at: within.ago..Time.current)
 
     total_count = results.count
 
-    return 100.0 if total_count.zero?
+    return "N/A" if total_count.zero?
 
     up_count = results.up.count
 
@@ -34,10 +39,25 @@ class MonitoredSite < ApplicationRecord
 
   private
 
+  def broadcast_to_dashboard
+    latest_result = check_results.last
+
+    return if latest_result.nil?
+
+    broadcast_prepend_to(
+      "monitoring_dashboard",
+      target: "global_live_feed",
+      partial: "check_results/check_result_live_feed",
+      locals: { check_result: latest_result }
+    )
+  end
+
   def handle_status_change
     previous_status, current_status = saved_change_to_last_status
 
     puts "Status changed from #{previous_status} to #{current_status} for site #{self.id}"
+
+    broadcast_to_dashboard()
 
     if (previous_status == "up" || previous_status == "pending") && current_status == "down"
       self.notifications.create!(

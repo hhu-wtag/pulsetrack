@@ -1,4 +1,5 @@
 <div class="container mx-auto py-8 px-4">
+  <% theme = status_style(@monitored_site.last_status) %>
   <%= turbo_stream_from @monitored_site %>
   <div class="mb-6">
     <div class="flex justify-between items-center">
@@ -11,29 +12,34 @@
     <%= link_to @monitored_site.url, @monitored_site.url, target: "_blank", class: "link link-primary text-lg" %>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-    <div class="card bg-base-100 shadow-xl">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div class="card bg-base-100 shadow-xl border border-1 <%= theme[:border] %> <%= theme[:shadow] %>">
+
       <div class="card-body">
         <h2 class="card-title">Current Status</h2>
         <% if @monitored_site.up? %>
           <p class="text-4xl font-bold text-success">Up</p>
           <p>Your site is online and responsive.</p>
         <% elsif @monitored_site.down? %>
-          <p class="text-4xl font-bold text-error">Down</p>
+          <p class="text-4xl font-bold text-rose-500">Down</p>
           <p>We couldn't reach your site on the last check.</p>
+
+        <% elsif @monitored_site.maintenance? %>
+          <p class="text-4xl font-bold text-yellow-400">Maintenance</p>
+          <p>This site is in maintenance mode. Regular checks are paused!</p>
+
         <% else %>
           <p class="text-4xl font-bold text-base-content/50">Pending</p>
           <p>We're scheduled to check your site shortly.</p>
         <% end %>
       </div>
     </div>
-
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Average Response</h2>
-        <%= render "monitored_sites/avg_time", 
-                    average: @initial_average,
-                    monitored_site: @monitored_site
+        <%= render "monitored_sites/avg_time",
+                   average: @initial_average,
+                   monitored_site: @monitored_site
         %>
         <p>Average over the last 24 hours.</p>
       </div>
@@ -41,8 +47,27 @@
     <div class="card bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Uptime (1h)</h2>
-        <p class="text-4xl font-bold"><%= @uptime %>%</p>
+        <p class="text-4xl font-bold"><%= @uptime %> <%= '%' unless @uptime == 'N/A' %></p>
         <p>Uptime over the last 1 hour.</p>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title font-bold text-yellow-400">Maintenance Mode</h2>
+
+        <% if @monitored_site.maintenance? %>
+          <%= button_to "Exit maintenance", out_maintenance_monitored_site_path(@monitored_site),
+                        method: :patch,
+                        class: "btn btn-warning mt-2"
+          %>
+        <% else %>
+          <%= button_to "Set to maintenance", in_maintenance_monitored_site_path(@monitored_site),
+                        method: :patch,
+                        class: "btn btn-warning mt-2"
+          %>
+        <% end %>
+
+
       </div>
     </div>
   </div>

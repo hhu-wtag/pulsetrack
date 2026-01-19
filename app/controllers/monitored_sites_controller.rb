@@ -30,6 +30,22 @@ class MonitoredSitesController < ApplicationController
   def edit
   end
 
+  def in_maintenance
+    @monitored_site = current_user.monitored_sites.find(params[:id])
+
+    @monitored_site.maintenance! unless @monitored_site.maintenance?
+
+    redirect_to monitored_site_path(params[:id])
+  end
+
+  def out_maintenance
+    @monitored_site = current_user.monitored_sites.find(params[:id])
+
+    @monitored_site.pending! if @monitored_site.maintenance?
+
+    redirect_to monitored_site_path(params[:id])
+  end
+
   def update
   end
 
