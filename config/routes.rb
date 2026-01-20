@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :teams do
+    get "switches/create"
+  end
   devise_for :users, path: "user"
   mount MissionControl::Jobs::Engine, at: "/jobs"
 

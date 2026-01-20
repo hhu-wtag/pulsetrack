@@ -3,7 +3,7 @@ class MonitoredSitesController < ApplicationController
   before_action :set_monitored_sites, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @monitored_sites = current_user.monitored_sites.order(created_at: :desc)
+    @monitored_sites = current_team.monitored_sites.order(created_at: :desc)
   end
 
   def show
@@ -19,7 +19,7 @@ class MonitoredSitesController < ApplicationController
   end
 
   def create
-    @monitored_site = current_user.monitored_sites.build(monitored_site_params)
+    @monitored_site = current_team.monitored_sites.build(monitored_site_params)
     if @monitored_site.save
       redirect_to monitored_sites_path, notice: "Site has been added for monitoring"
     else
@@ -31,7 +31,7 @@ class MonitoredSitesController < ApplicationController
   end
 
   def in_maintenance
-    @monitored_site = current_user.monitored_sites.find(params[:id])
+    @monitored_site = current_team.monitored_sites.find(params[:id])
 
     @monitored_site.maintenance! unless @monitored_site.maintenance?
 
@@ -39,7 +39,7 @@ class MonitoredSitesController < ApplicationController
   end
 
   def out_maintenance
-    @monitored_site = current_user.monitored_sites.find(params[:id])
+    @monitored_site = current_team.monitored_sites.find(params[:id])
 
     @monitored_site.pending! if @monitored_site.maintenance?
 
@@ -58,7 +58,7 @@ class MonitoredSitesController < ApplicationController
   private
 
   def set_monitored_sites
-    @monitored_site = current_user.monitored_sites.find(params[:id])
+    @monitored_site = current_team.monitored_sites.find(params[:id])
   end
 
   def monitored_site_params

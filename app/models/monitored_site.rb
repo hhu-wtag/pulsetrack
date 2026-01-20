@@ -1,5 +1,5 @@
 class MonitoredSite < ApplicationRecord
-  belongs_to :user
+  belongs_to :team
   has_many :check_results, dependent: :destroy
   has_many :notifications, as: :notifiable, dependent: :destroy
 
