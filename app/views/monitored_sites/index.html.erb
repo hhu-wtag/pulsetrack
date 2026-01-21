@@ -33,20 +33,26 @@
               <td><%= link_to site.url, site.url, target: "_blank", class: "link" %></td>
               <td><%= time_ago_in_words(site.check_results.last&.created_at || site.updated_at) %> ago</td>
               <td>
+
                 <div class="flex items-center">
                   <%= link_to "Details", site, class: "btn btn-ghost btn-sm", data: { turbo_frame: "_top" } %>
 
-                  <%= tag.button "Remove",
-                                 class: "btn btn-ghost btn-sm text-error",
-                                 data: {
-                                   action: "click->confirm#open",
-                                   confirm_title_param: "Delete #{site.name}?",
-                                   confirm_message_param: "Are you sure you want to delete this site?",
-                                   confirm_button_text_param: "Yes, Delete",
-                                   confirm_url_param: monitored_site_path(site)
-                                 }
-                  %>
+                  <% if current_user.has_edit_permission_in?(site.team) %>
+
+                    <%= tag.button "Remove",
+                                   class: "btn btn-ghost btn-sm text-error",
+                                   data: {
+                                     action: "click->confirm#open",
+                                     confirm_title_param: "Delete #{site.name}?",
+                                     confirm_message_param: "Are you sure you want to delete this site?",
+                                     confirm_button_text_param: "Yes, Delete",
+                                     confirm_url_param: monitored_site_path(site)
+                                   }
+                    %>
+
+                  <% end %>
                 </div>
+
               </td>
             <% end %>
           <% end %>

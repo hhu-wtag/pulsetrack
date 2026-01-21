@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     resources :check_results, only: [ :index, :show ]
   end
 
+  resources :teams, only: [ :index, :show ] do
+    resources :team_memberships, only: [ :index, :new, :create, :destroy ]
+  end
+
   root "pages#home", as: :home
 
   get "up" => "rails/health#show", as: :rails_health_check

@@ -12,6 +12,16 @@ class User < ApplicationRecord
 
   after_create :create_personal_team
 
+  def has_edit_permission_in?(team)
+    membership = team_memberships.find_by(team: team)
+
+    membership&.admin? or membership&.editor?
+  end
+
+  def is_admin_of?(team)
+    team_memberships.find_by(team: team)&.admin?
+  end
+
   private
 
   def create_personal_team
