@@ -66,28 +66,7 @@
   </div>
 
   <div class="card w-full max-w-5xl bg-base-200 shadow-xl overflow-hidden">
-    <table class="table table-zebra">
-      <thead>
-      <tr>
-        <th>Team Name</th>
-        <th>Your Role</th>
-        <th>Joined</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% current_user.team_memberships.includes(:team).each do |membership| %>
-        <tr>
-          <td class="font-bold"><%= membership.team.name %></td>
-          <td>
-            <div class="badge <%= role_badge_class(membership.role) %>">
-              <%= membership.role.titleize %>
-            </div>
-          </td>
-          <td><%= membership.created_at.strftime("%B %Y") %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+    <%= render "shared/team_table", team: current_team %>
   </div>
 
   <dialog id="team_edit_modal" class="modal">

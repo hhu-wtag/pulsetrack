@@ -1,30 +1,7 @@
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
   <% current_user.teams.each do |team| %>
-    <div class="card bg-base-100 shadow-xl border border-base-200">
-      <div class="card-body">
-        <div class="flex justify-between items-center">
-          <h2 class="card-title text-xl"><%= team.name %></h2>
-          <% if team == current_team %>
-            <span class="badge badge-success">Active</span>
-          <% end %>
-        </div>
-
-        <h3 class="text-sm font-semibold mt-4 text-base-content/60 uppercase">Members</h3>
-        <ul class="divide-y divide-base-200">
-          <% team.team_memberships.includes(:user).each do |membership| %>
-            <li class="py-2 flex justify-between items-center">
-              <span><%= membership.user.email %></span>
-              <span class="text-xs italic"><%= membership.role %></span>
-            </li>
-          <% end %>
-        </ul>
-
-        <% if current_user.is_admin_of?(team) %>
-          <div class="card-actions justify-end mt-4">
-            <%= link_to "Manage Members", team_team_memberships_path(team), class: "btn btn-sm btn-outline" %>
-          </div>
-        <% end %>
-      </div>
+    <div class="card w-full max-w-5xl bg-base-200 shadow-xl overflow-hidden">
+      <%= render "shared/team_table", team: team %>
     </div>
   <% end %>
 </div>

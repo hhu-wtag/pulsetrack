@@ -8,7 +8,7 @@
                 end
 %>
 
-<div role="alert" class="alert <%= alert_class %> shadow-lg mb-4">
+<div role="alert" data-controller="flash" class="alert <%= alert_class %> shadow-lg mb-4">
   <% if type.to_s == 'notice' %>
     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -22,5 +22,5 @@
   <span><%= message %></span>
 
   <%# Optional: Add a close button if you want %>
-  <button class="btn btn-ghost btn-xs" onclick="this.parentElement.remove()">✕</button>
+  <button class="btn btn-ghost btn-xs" data-action="flash#dismiss" onclick="this.parentElement.remove()">✕</button>
 </div>
