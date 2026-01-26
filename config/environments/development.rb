@@ -82,5 +82,7 @@ Rails.application.configure do
 
   config.log_tags = [ :request_id ]
 
-  config.logger = combined_logger
+  config.logger = ActiveSupport::TaggedLogging.new(combined_logger)
+  config.active_record.logger = nil
+  config.active_job.logger = nil
 end
