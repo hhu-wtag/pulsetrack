@@ -2,6 +2,7 @@ class MonitoredSitesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_monitored_sites, only: [ :show, :edit, :update, :destroy, :in_maintenance, :out_maintenance ]
   before_action :can_edit_site?, only: [ :in_maintenance, :out_maintenance ]
+  before_action :can_add_site?, only: [ :new, :create ]
 
   def index
     @monitored_sites = current_team.monitored_sites.order(created_at: :desc)
@@ -59,11 +60,17 @@ class MonitoredSitesController < ApplicationController
   private
 
   def set_monitored_sites
-    @monitored_site = current_team.monitored_sites.find(params[:id])
+    @monitored_site = current_user.monitored_sites.find(params[:id])
   end
 
   def monitored_site_params
     params.require(:monitored_site).permit(:name, :url, :check_frequency_seconds)
+  end
+
+  def can_add_site?
+    unless current_user.has_edit_permission_in?(current_team)
+      redirect_to monitored_sites_path, alert: "You are not authorized to perform this action. Please switch to a team where you have the necessary permissions."
+    end
   end
 
   def can_edit_site?

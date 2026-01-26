@@ -22,6 +22,10 @@ class User < ApplicationRecord
     team_memberships.find_by(team: team)&.admin?
   end
 
+  def is_member_of?(team)
+    team_memberships.exists?(team: team)
+  end
+
   private
 
   def create_personal_team

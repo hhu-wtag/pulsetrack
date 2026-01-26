@@ -3,5 +3,7 @@ class Team < ApplicationRecord
   has_many :users, through: :team_memberships
   has_many :monitored_sites, dependent: :destroy
 
+  accepts_nested_attributes_for :team_memberships
+
   validates :name, presence: true
 end

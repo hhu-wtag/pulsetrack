@@ -3,23 +3,26 @@ class TeamMembershipsController < ApplicationController
   before_action :is_admin?
 
   def create
-    user = User.find_by!(email: params[:email])
+    @user_to_add = User.find_by(email: params[:email])
 
-    role = params[:role] || "viewer"
-
-    if not user
-      redirect_to team_team_membership_path(@team), alert: "User with email #{params[:email]} not found."
+    if @user_to_add.nil?
+      redirect to team_path(@team), alert: "User with email #{params[:email]} not found."
 
       return
     end
 
-    membership = @team.team_memberships.find_or_initialize_by(user: user)
-    membership.role = params[:role] || "viewer"
+    if @team.users.include?(@user_to_add)
+      redirect_to team_path(@team), alert: "User is already a member of the team."
 
-    if membership.save
-      redirect_to team_team_memberships_path(@team), notice: "#{user.email} has been added to the team as #{membership.role}."
+      return
+    end
+
+    @membership = @team.team_memberships.new(user: @user_to_add, role: params[:role] || "viewer")
+
+    if @membership.save
+      redirect_to team_path(@team), notice: "User added to the team successfully."
     else
-      redirect_to team_team_memberships_path(@team), alert: "Failed to add user to the team."
+      redirect_to team_path(@team), alert: "Failed to add user to the team."
     end
   end
 
@@ -31,7 +34,7 @@ class TeamMembershipsController < ApplicationController
 
   def is_admin?
     unless current_user.is_admin_of?(@team)
-      redirect_to root_path, alert: "You are not authorized to perform this action."
+      redirect_to team_path(@team), alert: "You are not authorized to perform this action."
     end
   end
 end

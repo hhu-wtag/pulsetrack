@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   namespace :teams do
-    get "switches/create"
+    resources :switches, only: [ :create ]
   end
+
   devise_for :users, path: "user"
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
@@ -16,7 +17,7 @@ Rails.application.routes.draw do
     resources :check_results, only: [ :index, :show ]
   end
 
-  resources :teams, only: [ :index, :show ] do
+  resources :teams, only: [ :index, :show, :new, :create ] do
     resources :team_memberships, only: [ :index, :new, :create, :destroy ]
   end
 
