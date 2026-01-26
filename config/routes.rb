@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     resources :switches, only: [ :create ]
   end
 
-  devise_for :users, path: "user"
+  devise_for :users, **{ path: "user" }
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
   resource :user, only: [ :show ], controller: "users"
