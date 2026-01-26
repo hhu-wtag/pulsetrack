@@ -1,0 +1,94 @@
+<div class="mb-6">
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li><%= link_to "Teams", teams_path %></li>
+      <li><%= @team.name %></li>
+    </ul>
+  </div>
+  <h1 class="text-4xl font-black mt-2"><%= @team.name %> Dashboard</h1>
+</div>
+
+<div role="tablist" class="tabs tabs-lifted">
+
+  <input type="radio" name="team_tabs" role="tab" class="tab" aria-label="Overview" checked/>
+  <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+    <div class="stats shadow w-full mb-6">
+      <div class="stat">
+        <div class="stat-title">Sites Monitored</div>
+        <div class="stat-value text-primary"><%= @team.monitored_sites.count %></div>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Active Members</div>
+        <div class="stat-value text-secondary"><%= @team.team_memberships.count %></div>
+      </div>
+    </div>
+    <h3 class="text-xl font-bold mb-4">Sites in this Team</h3>
+    <%= render "monitored_sites/table", sites: @monitored_sites %>
+  </div>
+
+  <input type="radio" name="team_tabs" role="tab" class="tab" aria-label="Members"/>
+  <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold">Team Members</h3>
+      <% if current_user.is_admin_of?(@team) %>
+        <button class="btn btn-primary btn-sm" onclick="add_member_modal.showModal()">+ Add Member</button>
+      <% end %>
+    </div>
+
+    <table class="table w-full">
+      <thead>
+      <tr>
+        <th>User</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @memberships.each do |membership| %>
+        <tr>
+          <td><%= membership.user.email %></td>
+          <td>
+            <div class="badge badge-outline"><%= membership.role %></div>
+          </td>
+          <td>
+            <% if current_user.is_admin_of?(@team) && membership.user != current_user %>
+              <%= link_to "Remove", team_team_memberships_path(@team, membership), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-error text-xs" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if current_user.is_admin_of?(@team) %>
+    <input type="radio" name="team_tabs" role="tab" class="tab" aria-label="Settings"/>
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+      <h3 class="text-xl font-bold mb-4">Rename Team</h3>
+      <%= form_with model: @team, class: "flex gap-2" do |f| %>
+        <%= f.text_field :name, class: "input input-bordered w-full max-w-xs" %>
+        <%= f.submit "Update Name", class: "btn btn-neutral" %>
+      <% end %>
+
+      <div class="divider mt-10">Danger Zone</div>
+      <div class="p-4 border border-error/20 rounded-lg bg-error/5">
+        <h4 class="font-bold text-error">Delete Team</h4>
+        <p class="text-sm mb-4">Deleting this team will also delete all associated monitoring data.</p>
+        <%= link_to "Delete Team", team_path(@team), data: { turbo_method: :delete, turbo_confirm: "REALLY delete everything?" }, class: "btn btn-error btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+
+<dialog id="add_member_modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Add Member by Email</h3>
+    <%= render "team_memberships/form", team: @team %>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>

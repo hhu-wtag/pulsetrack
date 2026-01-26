@@ -1,0 +1,31 @@
+<%# app/views/memberships/_form.html.erb %>
+<%= form_with url: team_team_memberships_path(team), method: :post, class: "space-y-4" do |f| %>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text font-semibold">User Email Address</span>
+    </label>
+    <%= f.email_field :email,
+                      placeholder: "colleague@example.com",
+                      class: "input input-bordered w-full",
+                      required: true %>
+    <label class="label">
+      <span class="label-text-alt text-base-content/50">The user must already have an account on this platform.</span>
+    </label>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label">
+      <span class="label-text font-semibold">Assign Role</span>
+    </label>
+    <%= f.select :role,
+                 TeamMembership.roles.keys.map { |r| [r.titleize, r] },
+                 { selected: 'viewer' },
+                 class: "select select-bordered w-full" %>
+  </div>
+
+  <div class="mt-6">
+    <%= f.submit "Add Member to Team", class: "btn btn-primary w-full" %>
+  </div>
+
+<% end %>

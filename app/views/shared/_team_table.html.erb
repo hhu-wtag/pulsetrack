@@ -1,0 +1,22 @@
+<table class="table table-zebra">
+  <thead>
+  <tr>
+    <th>Team Name</th>
+    <th>Your Role</th>
+    <th>Joined</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% team.team_memberships.includes(:team).each do |membership| %>
+    <tr>
+      <td class="font-bold"><%= membership.team.name %></td>
+      <td>
+        <div class="badge <%= role_badge_class(membership.role) %>">
+          <%= membership.role.titleize %>
+        </div>
+      </td>
+      <td><%= membership.created_at.strftime("%B %Y") %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
