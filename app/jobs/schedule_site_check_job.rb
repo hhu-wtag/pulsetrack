@@ -2,29 +2,31 @@ class ScheduleSiteCheckJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    sites_due = MonitoredSite.ready_for_check
+    Rails.logger.tagged("Scheduler") do
+      sites_due = MonitoredSite.ready_for_check
 
-    if sites_due.any?
-      Rails.logger.info "[Scheduler] Found #{sites_due.count} sites ready for checking."
-    else
-      Rails.logger.debug "[Scheduler] No sites due for check at this time."
-      return
+      if sites_due.any?
+        Rails.logger.info "Found #{sites_due.count} sites ready for checking."
+      else
+        Rails.logger.debug "No sites due for check."
+        return
+      end
+
+      sites_due.each do |site|
+        Rails.logger.info "Queuing check for Site ID: #{site.id} (#{site.url})"
+
+        MonitorSiteJob.perform_later(site)
+
+        site.update_column(
+          :next_check_at,
+          Time.current + site.check_frequency_seconds.seconds
+        )
+      end
+
+      Rails.logger.info "Batch queuing complete."
     end
-
-    sites_due.each do |site|
-      Rails.logger.info "[Scheduler] Queuing check for: #{site.url} (ID: #{site.id})"
-      MonitorSiteJob.perform_later(site)
-
-      site.update_column(
-        :next_check_at,
-        Time.current + site.check_frequency_seconds.seconds
-      )
-    end
-
-    Rails.logger.info "[Scheduler] Finished queuing all sites."
+  rescue => e
+    Rails.logger.error "[Scheduler] CRITICAL FAILURE: #{e.message}"
+    Rails.logger.error e.backtrace.first(3).join("\n")
   end
-
-rescue => e
-  Rails.logger.error "[Scheduler] CRITICAL ERROR: #{e.message}"
-  Rails.logger.error e.backtrace.first(5).join("\n")
 end
