@@ -1,13 +1,16 @@
 <nav>
   <% if user_signed_in? %>
     <div class="navbar bg-base-100 shadow-sm">
-      <div class="flex-1">
-        <li><%= link_to "PulseTrack", home_path, class: "btn btn-ghost text-xl" %></li>
+      <div class="flex flex-1">
+        <p><%= link_to "PulseTrack", home_path, class: "btn btn-ghost text-xl" %></p>
+        <p><%= link_to current_team.name, team_path(current_team), class: "btn btn-ghost text-xs" %></p>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1 gap-2">
           <% if user_signed_in? %>
             <%= link_to "My Sites", monitored_sites_path, class: "btn btn-info #{active_nav_button_class('/monitored_sites')}" %>
+
+            <%= link_to "Teams", teams_path, class: "btn btn-info #{active_nav_button_class('/teams')}" %>
 
             <%= link_to "Account", user_path, class: "btn btn-info #{active_nav_button_class('/user')}" %>
 

@@ -26,3 +26,7 @@ tasks:
     desc: Run rubocop for linting with autocorrection
     cmds:
       - rubocop -A
+  test:
+    desc: Run rspec to run specs
+    cmds:
+      - bundle exec rspec

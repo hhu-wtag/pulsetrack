@@ -1,0 +1,2 @@
+module Teams::SwitchesHelper
+end

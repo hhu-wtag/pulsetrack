@@ -1,0 +1,13 @@
+<%= form_with url: team_team_memberships_path(@team), class: "flex flex-col gap-4 max-w-md" do |f| %>
+  <div class="form-control">
+    <label class="label"><span class="label-text">User Email</span></label>
+    <%= f.email_field :email, placeholder: "colleague@example.com", class: "input input-bordered", required: true %>
+  </div>
+
+  <div class="form-control">
+    <label class="label"><span class="label-text">Role</span></label>
+    <%= f.select :role, TeamMembership.roles.keys.map { |r| [r.titleize, r] }, {}, class: "select select-bordered" %>
+  </div>
+
+  <%= f.submit "Add Member", class: "btn btn-primary" %>
+<% end %>

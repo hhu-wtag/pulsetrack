@@ -1,11 +1,16 @@
 <div class="container mx-auto py-8 px-4">
   <% theme = status_style(@monitored_site.last_status) %>
+  <% current_user_can_edit = current_user.has_edit_permission_in?(@monitored_site.team) %>
+
   <%= turbo_stream_from @monitored_site %>
   <div class="mb-6">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-bold"><%= @monitored_site.name %></h1>
       <div>
-        <%= link_to "Edit", edit_monitored_site_path(@monitored_site), class: "btn btn-outline" %>
+        <% if current_user_can_edit %>
+          <%= link_to "Edit", edit_monitored_site_path(@monitored_site), class: "btn btn-outline" %>
+        <% end %>
+
         <%= link_to "Back to all sites", monitored_sites_path, class: "btn btn-ghost" %>
       </div>
     </div>
@@ -58,11 +63,13 @@
         <% if @monitored_site.maintenance? %>
           <%= button_to "Exit maintenance", out_maintenance_monitored_site_path(@monitored_site),
                         method: :patch,
+                        disabled: current_user_can_edit ? false : true,
                         class: "btn btn-warning mt-2"
           %>
         <% else %>
           <%= button_to "Set to maintenance", in_maintenance_monitored_site_path(@monitored_site),
                         method: :patch,
+                        disabled: current_user_can_edit ? false : true,
                         class: "btn btn-warning mt-2"
           %>
         <% end %>
