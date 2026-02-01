@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sample-secrets-name
+type: Opaque
+stringData:
+  RAILS_MASTER_KEY: "your_key_here"
+  # Base connection string
+  DB_HOST: "postgres-service"
+  DB_PASSWORD: "password"
+  # Individual URLs for the multi-db setup
+  DATABASE_URL: "postgres://postgres:password@postgres-service:5432/pulsetrack_production"
+  CACHE_DATABASE_URL: "postgres://postgres:password@postgres-service:5432/pulsetrack_production_cache"
+  QUEUE_DATABASE_URL: "postgres://postgres:password@postgres-service:5432/pulsetrack_production_queue"
+  CABLE_DATABASE_URL: "postgres://postgres:password@postgres-service:5432/pulsetrack_production_cable"

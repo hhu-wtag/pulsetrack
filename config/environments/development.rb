@@ -84,5 +84,10 @@ Rails.application.configure do
 
   config.logger = ActiveSupport::TaggedLogging.new(combined_logger)
   config.active_record.logger = nil
-  config.active_job.logger = nil
+
+  config.after_initialize do
+    SolidQueue.logger = Logger.new(nil)
+  end
+
+  config.active_job.logger = ActiveSupport::TaggedLogging.new(Logger.new(nil))
 end

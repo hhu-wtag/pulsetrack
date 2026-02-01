@@ -55,25 +55,36 @@ class MonitoredSite < ApplicationRecord
   def handle_status_change
     previous_status, current_status = saved_change_to_last_status
 
-    puts "Status changed from #{previous_status} to #{current_status} for site #{self.id}"
+    return if previous_status == current_status
 
-    broadcast_to_dashboard()
+    Rails.logger.tagged("StatusChange", "SiteID: #{id}") do
+      severity = current_status == "down" ? :warn : :info
+      Rails.logger.send(severity, "Transition: #{previous_status || 'nil'} -> #{current_status} (#{url})")
 
-    if (previous_status == "up" || previous_status == "pending") && current_status == "down"
-      self.notifications.create!(
-        user: self.user,
-        message: "Site down: #{self.name} is unreachable at #{self.url}."
-      )
+      broadcast_to_dashboard
 
-      # TODO: send email notification to user
+      if (previous_status == "up" || previous_status == "pending") && current_status == "down"
+        Rails.logger.warn "ALERT: Site went DOWN. Creating notification record."
 
-    elsif previous_status == "down" && current_status == "up"
-      self.notifications.create!(
-        user: self.user,
-        message: "Site up: #{self.name} is back online!"
-      )
+        notifications.create!(
+          user: user,
+          message: "Site down: #{name} is unreachable at #{url}."
+        )
 
-      # TODO: send email notification to user
+        Rails.logger.debug "Email Notification: [PENDING IMPLEMENTATION] for Site:#{id}"
+
+      elsif previous_status == "down" && current_status == "up"
+        Rails.logger.info "RECOVERY: Site is back UP. Creating notification record."
+
+        notifications.create!(
+          user: user,
+          message: "Site up: #{name} is back online!"
+        )
+
+        Rails.logger.debug "Email Notification: [PENDING IMPLEMENTATION] for Site:#{id}"
+      end
     end
+  rescue => e
+    Rails.logger.error "FAILED to handle status change for Site #{id}: #{e.message}"
   end
 end

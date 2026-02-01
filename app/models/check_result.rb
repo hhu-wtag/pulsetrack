@@ -15,17 +15,27 @@ class CheckResult < ApplicationRecord
   end
 
   def broadcast_new_result_to_table
-    domId = "check_results_body_monitored_site_#{monitored_site.id}"
+    dom_id = "check_results_body_monitored_site_#{monitored_site.id}"
 
-    puts "after check_result created! -> ", domId
+    Rails.logger.tagged("Hotwire", "Site:#{monitored_site.id}") do
+      Rails.logger.info "Broadcasting new result to target: #{dom_id}"
 
-    broadcast_prepend_later_to monitored_site,
-                               target: domId,
-                               partial: "check_results/check_result"
+      broadcast_prepend_later_to(
+        monitored_site,
+        target: dom_id,
+        partial: "check_results/check_result"
+      )
 
-    if monitored_site.check_results.length == 1
-      broadcast_remove_to monitored_site,
-                          target: [ monitored_site, "no_results_row" ]
+      if monitored_site.check_results.count == 1
+        Rails.logger.info "First result detected. Removing 'no_results_row' for Site:#{monitored_site.id}"
+
+        broadcast_remove_to(
+          monitored_site,
+          target: [ monitored_site, "no_results_row" ]
+        )
+      end
     end
+  rescue => e
+    Rails.logger.error "Broadcast failed for CheckResult #{id}: #{e.message}"
   end
 end
