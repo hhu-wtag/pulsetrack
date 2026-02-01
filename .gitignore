@@ -41,3 +41,6 @@
 !/app/assets/builds/.keep
 
 node_modules/
+/pulsetrack_dev.session.sql
+/k8s/app-config.yaml
+/k8s/postgres.yaml
