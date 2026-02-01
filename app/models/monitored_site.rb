@@ -63,28 +63,17 @@ class MonitoredSite < ApplicationRecord
 
       broadcast_to_dashboard
 
-      if (previous_status == "up" || previous_status == "pending") && current_status == "down"
-        Rails.logger.warn "ALERT: Site went DOWN. Creating notification record."
-
-        notifications.create!(
-          user: user,
-          message: "Site down: #{name} is unreachable at #{url}."
-        )
-
-        Rails.logger.debug "Email Notification: [PENDING IMPLEMENTATION] for Site:#{id}"
-
-      elsif previous_status == "down" && current_status == "up"
-        Rails.logger.info "RECOVERY: Site is back UP. Creating notification record."
-
-        notifications.create!(
-          user: user,
-          message: "Site up: #{name} is back online!"
-        )
-
-        Rails.logger.debug "Email Notification: [PENDING IMPLEMENTATION] for Site:#{id}"
+      if status_needs_alert?(previous_status, current_status)
+        SlackNotificationJob.perform_later(self)
       end
     end
   rescue => e
     Rails.logger.error "FAILED to handle status change for Site #{id}: #{e.message}"
+  end
+
+  private
+
+  def status_needs_alert?(old, new)
+    (old == "up" && new == "down") || (old == "down" && new == "up") || (old == "pending" && new == "down") || (old == "pending" && new == "up")
   end
 end
