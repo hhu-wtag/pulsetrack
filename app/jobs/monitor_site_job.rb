@@ -11,24 +11,26 @@ class MonitorSiteJob < ApplicationJob
   }.freeze
 
   def perform(monitored_site)
-    result = SiteChecker.new(monitored_site).call
+    Rails.logger.tagged("SiteCheck", "SiteID: #{monitored_site.id}") do
+      Rails.logger.info "Starting check for: #{monitored_site.url}"
+      result = SiteChecker.new(monitored_site).call
 
-    granular_status = result[:status]
+      Rails.logger.info "Result: status=#{result[:status]} | code=#{result[:http_status_code]} | time=#{result[:response_time_ms]}ms"
 
-    puts "Monitoring result for site #{monitored_site.id}: #{result.inspect} - #{monitored_site.check_results}"
+      monitored_site.check_results.create!(
+        status: result[:status],
+        http_status_code: result[:http_status_code],
+        response_time_ms: result[:response_time_ms],
+        error_message: result[:error_message]
+      )
 
-    monitored_site.check_results.create!(
-      status: granular_status,
-      http_status_code: result[:http_status_code],
-      response_time_ms: result[:response_time_ms],
-      error_message: result[:error_message]
-    )
+      simple_status = STATUS_MAP.fetch(result[:status], :down)
+      monitored_site.update!(last_status: simple_status)
 
-    simple_status = STATUS_MAP.fetch(result[:status], :down)
+      Rails.logger.info "Successfully updated site status to: #{simple_status}"
 
-    monitored_site.update!(last_status: simple_status)
-
-  rescue => e
-    Rails.logger.error "Failed to monitor site #{monitored_site.id}: #{e.message}"
+    rescue => e
+      Rails.logger.error "CRITICAL FAILURE for Site #{monitored_site.id}: #{e.message}"
+    end
   end
 end

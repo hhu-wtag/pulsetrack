@@ -20,8 +20,8 @@ RSpec.describe MonitoredSite, type: :model do
       expect(site).not_to be_valid
     end
 
-    it "is not valid without a user" do
-      site = build(:monitored_site, user: nil)
+    it "is not valid without a team" do
+      site = build(:monitored_site, team: nil)
 
       expect(site).not_to be_valid
     end

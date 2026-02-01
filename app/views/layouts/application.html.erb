@@ -27,7 +27,13 @@
 <header>
   <%= render "shared/navbar" %>
 </header>
-<main class="container mx-auto px-5 flex">
+<main class="container mx-auto px-5 flex relative">
+  <div id="flash" class="mt-4 fixed bottom-0 right-14">
+    <% flash.each do |type, message| %>
+      <%= render "shared/flash", type: type, message: message %>
+    <% end %>
+  </div>
+
   <%= yield %>
 </main>
 

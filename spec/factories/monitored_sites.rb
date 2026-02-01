@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :monitored_site do
-    association :user
+    association :team
     name { Faker::App.name }
     url { Faker::Internet.url }
     check_frequency_seconds { 300 }
