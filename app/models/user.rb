@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :team_memberships, dependent: :destroy
-  has_many :teams, through: :team_memberships
+  has_many :memberships, dependent: :destroy
+  has_many :teams, through: :memberships
   has_many :notifications, dependent: :destroy
 
   has_many :monitored_sites, through: :teams
@@ -13,17 +13,17 @@ class User < ApplicationRecord
   after_create :create_personal_team
 
   def has_edit_permission_in?(team)
-    membership = team_memberships.find_by(team: team)
+    membership = memberships.find_by(team: team)
 
     membership&.admin? or membership&.editor?
   end
 
   def is_admin_of?(team)
-    team_memberships.find_by(team: team)&.admin?
+    memberships.find_by(team: team)&.admin?
   end
 
   def is_member_of?(team)
-    team_memberships.exists?(team: team)
+    memberships.exists?(team: team)
   end
 
   private
@@ -31,6 +31,6 @@ class User < ApplicationRecord
   def create_personal_team
     team = teams.create!(name: "#{email.split('@').first}'s Team")
 
-    team_memberships.find_by(team: team).update(role: :admin)
+    memberships.find_by(team: team).update(role: :admin)
   end
 end

@@ -3,12 +3,12 @@ class TeamsController < ApplicationController
   before_action :ensure_admin!, only: [ :update ]
 
   def index
-    @teams = current_user.teams.includes(:team_memberships)
+    @teams = current_user.teams.includes(:memberships)
   end
 
   def show
     @monitored_sites = @team.monitored_sites
-    @memberships = @team.team_memberships.includes(:user)
+    @memberships = @team.memberships.includes(:user)
   end
 
   def update
@@ -25,7 +25,7 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.new(team_params)
-    @team.team_memberships.build(user: current_user, role: :admin)
+    @team.memberships.build(user: current_user, role: :admin)
 
     if @team.save
       redirect_to teams_path, notice: "Team: #{@team.name} created successfully."

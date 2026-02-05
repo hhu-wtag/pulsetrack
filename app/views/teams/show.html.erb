@@ -19,7 +19,7 @@
       </div>
       <div class="stat">
         <div class="stat-title">Active Members</div>
-        <div class="stat-value text-secondary"><%= @team.team_memberships.count %></div>
+        <div class="stat-value text-secondary"><%= @team.memberships.count %></div>
       </div>
     </div>
     <h3 class="text-xl font-bold mb-4">Sites in this Team</h3>
@@ -52,7 +52,7 @@
           </td>
           <td>
             <% if current_user.is_admin_of?(@team) && membership.user != current_user %>
-              <%= link_to "Remove", team_team_memberships_path(@team, membership), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-error text-xs" %>
+              <%= link_to "Remove", team_memberships_path(@team, membership), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-error text-xs" %>
             <% end %>
           </td>
         </tr>
@@ -84,7 +84,7 @@
 <dialog id="add_member_modal" class="modal">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Add Member by Email</h3>
-    <%= render "team_memberships/form", team: @team %>
+    <%= render "memberships/form", team: @team %>
     <div class="modal-action">
       <form method="dialog">
         <button class="btn">Close</button>
