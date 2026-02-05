@@ -1,6 +1,5 @@
 class TeamsController < ApplicationController
   before_action :set_team, only: [ :show, :update ]
-  before_action :ensure_admin!, only: [ :update ]
 
   def index
     @teams = current_user.teams.includes(:memberships)
@@ -12,6 +11,7 @@ class TeamsController < ApplicationController
   end
 
   def update
+    authorize! :update, @team
     if @team.update(team_params)
       redirect_to @team, notice: "Team updated successfully."
     else
@@ -38,10 +38,6 @@ class TeamsController < ApplicationController
 
   def set_team
     @team = current_user.teams.find(params[:id])
-  end
-
-  def ensure_admin!
-    redirect_to @team, alert: "Admins only." unless current_user.is_admin_of?(@team)
   end
 
   def team_params

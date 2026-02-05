@@ -1,8 +1,6 @@
 class MonitoredSitesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_monitored_sites, only: [ :show, :edit, :update, :destroy, :in_maintenance, :out_maintenance ]
-  before_action :can_edit_site?, only: [ :in_maintenance, :out_maintenance ]
-  before_action :can_add_site?, only: [ :new, :create ]
 
   def index
     @monitored_sites = current_team.monitored_sites.order(created_at: :desc)
@@ -17,10 +15,12 @@ class MonitoredSitesController < ApplicationController
   end
 
   def new
+    authorize! :create, MonitoredSite
     @monitored_site = MonitoredSite.new
   end
 
   def create
+    authorize! :create, MonitoredSite
     @monitored_site = current_team.monitored_sites.build(monitored_site_params)
     if @monitored_site.save
       redirect_to monitored_sites_path, notice: "Site has been added for monitoring"
@@ -33,17 +33,19 @@ class MonitoredSitesController < ApplicationController
   end
 
   def in_maintenance
+    authorize! :in_maintenance, @monitored_site
     @monitored_site = current_team.monitored_sites.find(params[:id])
 
-    @monitored_site.maintenance! unless @monitored_site.maintenance?
+    @monitored_site.maintenance!
 
     redirect_to monitored_site_path(params[:id])
   end
 
   def out_maintenance
+    authorize! :out_maintenance, @monitored_site
     @monitored_site = current_team.monitored_sites.find(params[:id])
 
-    @monitored_site.pending! if @monitored_site.maintenance?
+    @monitored_site.pending!
 
     redirect_to monitored_site_path(params[:id])
   end
@@ -52,9 +54,10 @@ class MonitoredSitesController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @monitored_site
     @monitored_site.destroy
 
-    redirect_to monitored_sites_url, notice: "Site has been deleted from monitoring"
+    redirect_to monitored_sites_path, notice: "Site has been deleted from monitoring"
   end
 
   private
@@ -65,17 +68,5 @@ class MonitoredSitesController < ApplicationController
 
   def monitored_site_params
     params.require(:monitored_site).permit(:name, :url, :check_frequency_seconds)
-  end
-
-  def can_add_site?
-    unless current_user.has_edit_permission_in?(current_team)
-      redirect_to monitored_sites_path, alert: "You are not authorized to perform this action. Please switch to a team where you have the necessary permissions."
-    end
-  end
-
-  def can_edit_site?
-    unless current_user.has_edit_permission_in?(@monitored_site.team)
-      redirect_to monitored_site_path(@monitored_site), alert: "You are not authorized to perform this action."
-    end
   end
 end

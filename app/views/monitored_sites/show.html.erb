@@ -7,9 +7,12 @@
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-bold"><%= @monitored_site.name %></h1>
       <div>
-        <% if current_user_can_edit %>
-          <%= link_to "Edit", edit_monitored_site_path(@monitored_site), class: "btn btn-outline" %>
-        <% end %>
+        <%= link_to "Edit",
+                    edit_monitored_site_path(@monitored_site),
+                    class: "btn btn-outline",
+                    disabled: can?(:edit, @monitored_site) ? false : true
+
+        %>
 
         <%= link_to "Back to all sites", monitored_sites_path, class: "btn btn-ghost" %>
       </div>

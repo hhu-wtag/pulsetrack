@@ -17,9 +17,8 @@ class ScheduleSiteCheckJob < ApplicationJob
 
         MonitorSiteJob.perform_later(site)
 
-        site.update_column(
-          :next_check_at,
-          Time.current + site.check_frequency_seconds.seconds
+        site.update!(
+          next_check_at: Time.current + site.check_frequency_seconds.seconds
         )
       end
 

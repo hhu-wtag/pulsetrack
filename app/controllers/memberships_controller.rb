@@ -1,8 +1,8 @@
 class MembershipsController < ApplicationController
   before_action :set_team
-  before_action :is_admin?
 
   def create
+    authorize! :create, Membership
     @user_to_add = User.find_by(email: params[:email])
 
     if @user_to_add.nil?
@@ -30,11 +30,5 @@ class MembershipsController < ApplicationController
 
   def set_team
     @team = current_user.teams.find(params[:team_id])
-  end
-
-  def is_admin?
-    unless current_user.is_admin_of?(@team)
-      redirect_to team_path(@team), alert: "You are not authorized to perform this action."
-    end
   end
 end
