@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   resources :teams, only: [ :index, :show, :new, :create ] do
-    resources :team_memberships, only: [ :index, :new, :create, :destroy ]
+    resources :memberships, only: [ :index, :new, :create, :destroy ]
   end
 
   root "pages#home", as: :home

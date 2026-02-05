@@ -7,7 +7,7 @@
   </tr>
   </thead>
   <tbody>
-  <% team.team_memberships.includes(:team).each do |membership| %>
+  <% team.memberships.includes(:team).each do |membership| %>
     <tr>
       <td class="font-bold"><%= membership.team.name %></td>
       <td>
