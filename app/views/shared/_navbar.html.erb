@@ -1,9 +1,10 @@
 <nav>
   <% if user_signed_in? %>
     <div class="navbar bg-base-100 shadow-sm">
-      <div class="flex flex-1">
+      <div class="flex items-center flex-1">
         <p><%= link_to "PulseTrack", home_path, class: "btn btn-ghost text-xl" %></p>
         <p><%= link_to current_team.name, team_path(current_team), class: "btn btn-ghost text-xs" %></p>
+        <p class="p-2 rounded-sm <%= role_theme(current_membership.role) %>"> <%= current_membership.role %> </p>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1 gap-2">
