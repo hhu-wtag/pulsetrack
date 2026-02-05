@@ -1,4 +1,4 @@
-class TeamMembershipsController < ApplicationController
+class MembershipsController < ApplicationController
   before_action :set_team
   before_action :is_admin?
 
@@ -17,7 +17,7 @@ class TeamMembershipsController < ApplicationController
       return
     end
 
-    @membership = @team.team_memberships.new(user: @user_to_add, role: params[:role] || "viewer")
+    @membership = @team.memberships.new(user: @user_to_add, role: params[:role] || "viewer")
 
     if @membership.save
       redirect_to team_path(@team), notice: "User added to the team successfully."

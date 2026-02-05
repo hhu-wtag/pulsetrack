@@ -5,7 +5,7 @@ RSpec.describe "MonitoredSites", type: :request do
   let!(:user) { create(:user) }
   let!(:team) { create(:team) }
   # Ensure the user is actually IN the team
-  let!(:membership) { create(:team_membership, user: user, team: team, role: :admin) }
+  let!(:membership) { create(:membership, user: user, team: team, role: :admin) }
 
   # 2. Update the site to belong to the team (FactoryBot should now use 'team')
   let!(:site) { create(:monitored_site, team: team) }
@@ -38,7 +38,7 @@ RSpec.describe "MonitoredSites", type: :request do
 
       it "doesn't show sites from a team the user isn't currently viewing" do
         other_team = create(:team)
-        create(:team_membership, user: user, team: other_team)
+        create(:membership, user: user, team: other_team)
         other_site = create(:monitored_site, team: other_team, name: "Secret Site")
 
         get monitored_sites_path

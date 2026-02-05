@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_01_071832) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_100356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_071832) do
     t.index ["created_at"], name: "index_check_results_on_created_at"
     t.index ["monitored_site_id", "created_at"], name: "index_check_results_on_monitored_site_id_and_created_at"
     t.index ["monitored_site_id"], name: "index_check_results_on_monitored_site_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "role"
+    t.bigint "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["team_id"], name: "index_memberships_on_team_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "monitored_sites", force: :cascade do |t|
@@ -53,16 +63,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_071832) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "team_memberships", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "role"
-    t.bigint "team_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["team_id"], name: "index_team_memberships_on_team_id"
-    t.index ["user_id"], name: "index_team_memberships_on_user_id"
-  end
-
   create_table "teams", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -82,8 +82,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_01_071832) do
   end
 
   add_foreign_key "check_results", "monitored_sites"
+  add_foreign_key "memberships", "teams"
+  add_foreign_key "memberships", "users"
   add_foreign_key "monitored_sites", "teams"
   add_foreign_key "notifications", "users"
-  add_foreign_key "team_memberships", "teams"
-  add_foreign_key "team_memberships", "users"
 end
